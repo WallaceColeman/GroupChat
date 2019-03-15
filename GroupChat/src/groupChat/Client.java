@@ -16,17 +16,22 @@ public class Client {
 			DataInputStream resultFromServer = new DataInputStream(sock.getInputStream());
 			
 			Scanner scan = new Scanner(System.in);
+			System.out.print("Enter name: ");
+			String name = scan.nextLine();
 			
 			while(true) {
+				System.out.println("Enter number to be doubled");
 				data2server.writeInt(scan.nextInt());
-				System.out.println(resultFromServer.readInt());
+				System.out.println(name + ": " + resultFromServer.readInt());
 			}
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			System.out.println("Server not found");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			System.out.println("Input in wrong format");
 		}
 	}
 
