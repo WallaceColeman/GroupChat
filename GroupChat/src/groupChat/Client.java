@@ -20,7 +20,7 @@ public class Client {
 			String name = scan.nextLine();
 			
 			while(true) {
-				System.out.println("Enter number to be doubled");
+				System.out.println("Enter message: ");
 				data2server.writeInt(scan.nextInt());
 				System.out.println(name + ": " + resultFromServer.readInt());
 			}
@@ -35,4 +35,12 @@ public class Client {
 		}
 	}
 
+}
+
+class Recieve extends Thread{
+	
+}
+
+class Send extends Thread{
+	
 }
