@@ -1,3 +1,10 @@
+/*
+ * Course: CS 4345
+ * Semester: Spring 2019
+ * Assignment: Assignment 3
+ * Names: Wallace Coleman, Savon Jackson, Amanda Seasholtz
+ */
+
 package groupChat;
 
 import java.net.*;
@@ -7,7 +14,7 @@ import java.util.*;
 public class SeverSide {
 	static ArrayList<Connector> connections = new ArrayList<>();
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
+		
 		//ArrayList<Socket> clients = new ArrayList<>();
 		try {
 			ServerSocket servSock = new ServerSocket(7000);
@@ -20,10 +27,23 @@ public class SeverSide {
 			
 			while(true) {
 				connections = thread1.getConections();
-				//System.out.println(connections.size());
+				try {
+					//System.out.println("here");
+//					for (int i = 0; i < connections.size(); i++) {
+//						System.out.println("here");
+//						System.out.println(connections.get(i).getInputFromClient().readUTF());
+//					}
+					for(Connector i: connections) {
+						if(i.getInputFromClient().available() != 0) {
+							System.out.println(i.getInputFromClient().readUTF());
+						}
+					}
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -33,11 +53,14 @@ class Connector{
 	Socket client;
 	DataInputStream inputFromClient;
 	DataOutputStream output2client;
-	
+	String name;
+
 	public Connector(Socket client) throws IOException {
 		this.client = client;
 		inputFromClient = new DataInputStream(client.getInputStream());
 		output2client = new DataOutputStream(client.getOutputStream());
+		name = inputFromClient.readUTF();
+		System.out.println(name);
 	}
 	
 	public Socket getClient() {
@@ -51,6 +74,14 @@ class Connector{
 	public DataOutputStream getOutput2client() {
 		return output2client;
 	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
+	}
 }
 
 class GetMembers extends Thread{
@@ -63,13 +94,9 @@ class GetMembers extends Thread{
 		// TODO Auto-generated constructor stub
 	}
 
-
-	
 	public ArrayList<Connector> getConections(){
-		//System.out.println("Here");
 		return conections;
 	}
-	
 	
 	public void run() {
 		while(true) {
@@ -86,3 +113,16 @@ class GetMembers extends Thread{
 		}
 	}
 }
+
+//class Server extends Thread{
+//	ArrayList<Connector> connections = new ArrayList<>();
+//	public Server() {
+//		
+//	}
+//	
+//	public void run() {
+//		while(true) {
+//			connections 
+//		}
+//	}
+//}
