@@ -1,3 +1,10 @@
+
+/*
+ * Course: CS 4345
+ * Semester: Spring 2019
+ * Assignment: Assignment 3
+ * Names: Wallace Coleman, Savon Jackson, Amanda Seasholtz
+ */
 package groupChat;
 
 import java.net.*;
@@ -58,7 +65,8 @@ class Send extends Thread{
 	
 	public void run() {
 		String input;
-		System.out.println("Instructions go here");
+		System.out.println("For group message type \"group: \" plus your message\n"
+				+ "For a personal message type \"<name>: \" plus your message");
 		while(true) {
 			
 //			switch(input.split(" ")[0]) {

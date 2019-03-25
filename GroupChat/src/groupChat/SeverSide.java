@@ -1,3 +1,10 @@
+/*
+ * Course: CS 4345
+ * Semester: Spring 2019
+ * Assignment: Assignment 3
+ * Names: Wallace Coleman, Savon Jackson, Amanda Seasholtz
+ */
+
 package groupChat;
 
 import java.net.*;
@@ -47,7 +54,7 @@ class Connector{
 	DataInputStream inputFromClient;
 	DataOutputStream output2client;
 	String name;
-	
+
 	public Connector(Socket client) throws IOException {
 		this.client = client;
 		inputFromClient = new DataInputStream(client.getInputStream());
@@ -66,6 +73,14 @@ class Connector{
 
 	public DataOutputStream getOutput2client() {
 		return output2client;
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	public void setName(String name) {
+		this.name = name;
 	}
 }
 
