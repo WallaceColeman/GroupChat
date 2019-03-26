@@ -104,7 +104,7 @@ class Send extends Thread{
 			try {
 				//System.out.println("Enter message: ");
 				input = scan.nextLine();
-				data2server.writeUTF("From " + name + " to: " + input);
+				data2server.writeUTF(name + ": " + input);
 				if(input.trim().equalsIgnoreCase("Quit")) {
 					System.exit(0);
 				}
@@ -113,5 +113,4 @@ class Send extends Thread{
 			}
 		}
 	}
-	
 }
