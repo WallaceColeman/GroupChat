@@ -33,9 +33,31 @@ public class SeverSide {
 //						System.out.println("here");
 //						System.out.println(connections.get(i).getInputFromClient().readUTF());
 //					}
+					String message;
 					for(Connector i: connections) {
 						if(i.getInputFromClient().available() != 0) {
-							System.out.println(i.getInputFromClient().readUTF());
+							message = i.getInputFromClient().readUTF();
+							if(message.split(":")[1].trim().equalsIgnoreCase("QUIT")) {
+								for(Connector j: connections) {
+									j.getOutput2client().writeUTF(i.getName() + " has disconnected");
+								}
+								connections.remove(i);
+							}
+							else {
+								if(message.split(":")[1].trim().equalsIgnoreCase("GROUP")) {
+									for(Connector j: connections) {
+										j.getOutput2client().writeUTF(message);
+									}
+								}
+								else {
+									for(Connector j: connections) {
+										if(j.getName().trim().equals(message.split(":")[1].trim())) {
+											j.getOutput2client().writeUTF(message);
+										}
+									}
+								}
+								System.out.println(message);
+							}
 						}
 					}
 				} catch (Exception e) {
@@ -55,11 +77,29 @@ class Connector{
 	DataOutputStream output2client;
 	String name;
 
-	public Connector(Socket client) throws IOException {
+	public Connector(Socket client, ArrayList<Connector> connections) throws IOException {
 		this.client = client;
 		inputFromClient = new DataInputStream(client.getInputStream());
 		output2client = new DataOutputStream(client.getOutputStream());
 		name = inputFromClient.readUTF();
+		int count = 1;
+		boolean wasTaken = false;
+		for(Connector i: connections) {
+			if(i.getName().trim().equalsIgnoreCase(name)) {
+				if(count == 1) {
+					name = name.substring(0, name.length()-(count/10)) +"_"+ count;
+				}
+				else {
+					name = name.substring(0, name.length()-(2+count/10)) +"_"+ count;
+				}
+				
+				count++;
+				wasTaken = true;
+			}
+		}
+		if(wasTaken) {
+			output2client.writeUTF("Name taken. Your user name is: " + name);
+		}
 		System.out.println(name);
 	}
 	
@@ -102,9 +142,12 @@ class GetMembers extends Thread{
 		while(true) {
 			try {
 				Socket client = servSock.accept();
-				Connector conection = new Connector(client);
+				Connector conection = new Connector(client, conections);
 				conections.add(conection);
 				System.out.println("Added Member");
+				for(Connector i: conections) {
+					i.getOutput2client().writeUTF(conections.get(conections.size()-1).getName()+" has joined the group");
+				}
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
