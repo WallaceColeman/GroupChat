@@ -1,4 +1,3 @@
-
 /*
  * Course: CS 4345
  * Semester: Spring 2019
@@ -12,7 +11,6 @@ import java.io.*;
 import java.util.*;
 
 public class Client {
-
 	public static void main(String[] args) {
 		try {
 			Socket sock = new Socket("127.0.0.1", 7000);
@@ -29,13 +27,9 @@ public class Client {
 			data2server.writeUTF(name);
 			Send send = new Send(data2server, name);
 			send.start();
-			//fromServer.readInt();
-			
-//			while(true) {
-//				//System.out.println("Enter message: ");
-//				//data2server.writeInt(scan.nextInt());
-//				System.out.println(name + ": " + fromServer.readInt());
-//			}
+			Recieve recieve = new Recieve(fromServer);
+			recieve.start();
+
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
 			//e.printStackTrace();
@@ -43,14 +37,52 @@ public class Client {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			//e.printStackTrace();
-			System.out.println("Input in wrong format");
+			System.out.println("Cannot Connect");
 		}
 	}
 
 }
 
 class Recieve extends Thread{
+	DataInputStream fromServer;
 	
+	public Recieve(DataInputStream fromServer) {
+		this.fromServer = fromServer;
+	}
+	
+	public void run() {
+		String strFromServer;
+		int errorCount = 0;
+		
+		while(true) {
+			try {
+				strFromServer = fromServer.readUTF();
+				//****************************************************************
+				// This is for GUI if implemented
+				//****************************************************************
+//				if(strFromServer.split(":")[1].equalsIgnoreCase("GROUP")) {
+//					System.out.println("Group");
+//				}
+//				else {
+//					System.out.println("Personal");
+//				}
+				System.out.println(strFromServer);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				//e.printStackTrace();
+				System.out.println("Error reading from server");
+				
+				if(errorCount < 10) {
+					errorCount++;
+				}
+				else{
+					System.out.println("Too many reading errors disconnecting");
+					System.exit(0);
+				}
+				
+			}
+		}
+	}
 }
 
 class Send extends Thread{
@@ -66,20 +98,19 @@ class Send extends Thread{
 	public void run() {
 		String input;
 		System.out.println("For group message type \"group: \" plus your message\n"
-				+ "For a personal message type \"<name>: \" plus your message");
+				+ "For a personal message type \"<name>: \" plus your message\n"
+				+ "To quit type \"quit\"");
 		while(true) {
-			
-//			switch(input.split(" ")[0]) {
-//			
-//			}
 			try {
-				System.out.println("Enter message: ");
+				//System.out.println("Enter message: ");
 				input = scan.nextLine();
-				data2server.writeUTF(name+": "+input);
+				data2server.writeUTF(name + ": " + input);
+				if(input.trim().equalsIgnoreCase("Quit")) {
+					System.exit(0);
+				}
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
 	}
-	
 }
