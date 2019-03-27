@@ -13,16 +13,17 @@ import java.util.*;
 public class Client {
 	public static void main(String[] args) {
 		try {
+			
+			Scanner scan = new Scanner(System.in);
+			System.out.print("Enter name: ");
+			String name = scan.nextLine();
+			
 			Socket sock = new Socket("127.0.0.1", 7000);
 			
 			//create an output stream to send data to the server
 			DataOutputStream data2server = new DataOutputStream(sock.getOutputStream());
 			//create an input stream to receive data from server
 			DataInputStream fromServer = new DataInputStream(sock.getInputStream());
-			
-			Scanner scan = new Scanner(System.in);
-			System.out.print("Enter name: ");
-			String name = scan.nextLine();
 			
 			data2server.writeUTF(name);
 			Send send = new Send(data2server, name);
@@ -98,6 +99,7 @@ class Send extends Thread{
 	public void run() {
 		String input;
 		System.out.println("For group message type \"group: \" plus your message\n"
+				+ "or type your message with no \":\"\n"
 				+ "For a personal message type \"<name>: \" plus your message\n"
 				+ "To quit type \"quit\"");
 		while(true) {

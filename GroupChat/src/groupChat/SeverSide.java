@@ -128,7 +128,7 @@ class Connector {
 			}
 		}
 		if (wasTaken) {
-			output2client.writeUTF("Name taken. Your user name is: " + name);
+			output2client.writeUTF("\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\nName taken. Your user name is: " + name + "\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!\n");
 		}
 		System.out.println(name);
 	}
