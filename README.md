@@ -1,3 +1,3 @@
 # GroupChat
 
-Allows communication between two consols on a local machine
+Allows communication between two consoles on a local machine
